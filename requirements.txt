@@ -1,0 +1,9 @@
+langchain
+langchain-community
+langgraph
+langchain-core
+faiss-cpu
+sentence-transformers
+python-docx
+docx2txt
+huggingface-hub
