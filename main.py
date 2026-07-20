@@ -11,6 +11,7 @@ from dataclasses import dataclass
 
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 import uvicorn
 
@@ -73,7 +74,7 @@ class RAGConfig:
     
     # Document processing
     chunk_size: int = 1500
-    chunk_overlap: int =300
+    chunk_overlap: int = 300
     
     # Vector store
     vector_store_path: str = "faiss_index"
@@ -396,6 +397,27 @@ app = FastAPI(
     version="2.0.0"
 )
 
+# ============================================================================
+# CORS MIDDLEWARE CONFIGURATION
+# ============================================================================
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "https://bkumar0823.space",
+        "https://bkumar-portfolio.onrender.com",
+        "https://learninglogmanager.onrender.com/openapi.json",
+        "https://learninglogmanager.onrender.com",
+        "http://localhost:5173",
+        "http://localhost:3000",
+        "http://localhost:8000",
+        "all"
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # Configuration
 config = RAGConfig()
 
@@ -556,7 +578,7 @@ async def check_document():
     doc_path = config.document_path
     
     if os.path.exists(doc_path):
-        file_size = os.path.getsize(doc_path)  # FIXED: os.path.getsize()
+        file_size = os.path.getsize(doc_path)
         return {
             "exists": True,
             "path": doc_path,
